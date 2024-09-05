@@ -21,7 +21,7 @@ spec:
     - name: output-bucket
       value: subsetter-outputs
     - name: hucs
-      value: 102600070103,102600070104,102600090205,102600050206,102600070102
+      value: 102600070103,102600070104,102600090205,102600050206
   entrypoint: huc-to-shp
   templateDefaults:
     inputs: {}
