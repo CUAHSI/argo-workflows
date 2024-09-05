@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  creationTimestamp: "2023-08-10T16:26:40Z"
+  generateName: test-dask-
+  generation: 15
+  labels:
+    workflows.argoproj.io/creator: "112251210534458906530"
+  name: test-dask
+  namespace: workflows
+  resourceVersion: "220464407"
+  uid: d23dc5ee-fd76-4aaa-b86b-564b0dcd2ebf
+spec:
+  arguments: {}
+  entrypoint: dask-test-script
+  templates:
+  - inputs: {}
+    metadata: {}
+    name: dask-test-script
+    outputs: {}
+    script:
+      command:
+      - python
+      image: ghcr.io/dask/dask
+      name: main
+      ports:
+      - containerPort: 8787
+      resources:
+        requests:
+          cpu: "2"
+          ephemeral-storage: 10Gi
+          memory: 6Gi
+      source: |
+        import dask.bag as db
+        from operator import add
+        from dask.distributed import Client, progress
+
+        if __name__ == "__main__":
+          client = Client(n_workers=3, memory_limit='2GB')
+          print(client)
+
+          b = db.from_sequence(range(0, 5000), npartitions=1)
+          res = b.map(add, b).compute()
+          print(sum(res))
+  ttlStrategy:
+    secondsAfterCompletion: 300
+  workflowMetadata:
+    labels:
+      example: "true"

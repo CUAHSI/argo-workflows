@@ -1,0 +1,140 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  creationTimestamp: "2023-12-21T17:47:27Z"
+  generation: 13
+  labels:
+    workflows.argoproj.io/creator: "112251210534458906530"
+  name: cge-configure
+  namespace: workflows
+  resourceVersion: "370781906"
+  uid: 99d31ef5-b5db-4f74-af52-4894fbea81a0
+spec:
+  arguments:
+    parameters:
+    - name: forcing-bucket
+      value: subsetter-outputs
+    - name: forcing-path
+      value: acastronova/wb-2917533/forcing
+    - name: forcing-file-name
+      value: results.nc
+    - name: domain-bucket
+      value: subsetter-outputs
+    - name: domain-path
+      value: acastronova/wb-2917533/domain
+    - name: geopackage-file-name
+      value: wb-2917533_upstream_subset.gpkg
+    - name: noaaowp-attributes-file-name
+      value: cfe_noahowp_attributes.csv
+    - name: output-bucket
+      value: subsetter-outputs
+    - name: output-path
+      value: acastronova/wb-2917533
+  entrypoint: configure
+  templateDefaults:
+    inputs: {}
+    metadata: {}
+    outputs: {}
+    retryStrategy:
+      limit: "0"
+    timeout: 600s
+  templates:
+  - container:
+      args:
+      - /srv/input/domain/{{inputs.parameters.geopackage-file-name}}
+      - /srv/input/forcing/{{inputs.parameters.forcing-file-name}}
+      - /srv/input/domain/{{inputs.parameters.noaaowp-attributes-file-name}}
+      - /srv/output
+      - "1"
+      - "7"
+      - --verbose
+      command:
+      - python
+      - -u
+      - entry.py
+      image: cuahsi/cfe-configure:latest
+      name: ""
+      ports:
+      - containerPort: 8787
+      resources:
+        requests:
+          cpu: "2"
+          ephemeral-storage: 10Gi
+          memory: 16Gi
+    inputs:
+      artifacts:
+      - name: forcing-data
+        path: /srv/input/forcing
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: minio-credentials
+          bucket: '{{inputs.parameters.forcing-bucket}}'
+          endpoint: api.minio.cuahsi.io
+          key: '{{inputs.parameters.forcing-path}}'
+          secretKeySecret:
+            key: secretKey
+            name: minio-credentials
+      - name: domain-data
+        path: /srv/input/domain
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: minio-credentials
+          bucket: '{{inputs.parameters.domain-bucket}}'
+          endpoint: api.minio.cuahsi.io
+          key: '{{inputs.parameters.domain-path}}'
+          secretKeySecret:
+            key: secretKey
+            name: minio-credentials
+      parameters:
+      - name: forcing-bucket
+        value: '{{workflow.parameters.forcing-bucket}}'
+      - name: forcing-path
+        value: '{{workflow.parameters.forcing-path}}'
+      - name: forcing-file-name
+        value: '{{workflow.parameters.forcing-file-name}}'
+      - name: domain-bucket
+        value: '{{workflow.parameters.domain-bucket}}'
+      - name: domain-path
+        value: '{{workflow.parameters.domain-path}}'
+      - name: geopackage-file-name
+        value: '{{workflow.parameters.geopackage-file-name}}'
+      - name: noaaowp-attributes-file-name
+        value: '{{workflow.parameters.noaaowp-attributes-file-name}}'
+      - name: output-bucket
+        value: '{{workflow.parameters.output-bucket}}'
+      - name: output-path
+        value: '{{workflow.parameters.output-path}}'
+    metadata: {}
+    name: configure
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        name: output-configs
+        path: /srv/output/config
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: minio-credentials
+          bucket: '{{inputs.parameters.output-bucket}}'
+          endpoint: api.minio.cuahsi.io
+          key: '{{inputs.parameters.output-path}}/config'
+          secretKeySecret:
+            key: secretKey
+            name: minio-credentials
+      - archive:
+          none: {}
+        name: output-forcing
+        path: /srv/output/forcing
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: minio-credentials
+          bucket: '{{inputs.parameters.output-bucket}}'
+          endpoint: api.minio.cuahsi.io
+          key: '{{inputs.parameters.output-path}}/forcing'
+          secretKeySecret:
+            key: secretKey
+            name: minio-credentials

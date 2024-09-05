@@ -1,0 +1,167 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      This workflow demonstrates map-reduce using "key-only" artifacts.
+      The first task "split" produces a number of parts, each in the form of a JSON document, saving it to a bucket.
+      Each "map" task then reads those documents, performs a map operation, and writes them out to a new bucket.
+      Finally, "reduce" merges all the mapped documents into a final document.
+    workflows.argoproj.io/version: '>= 3.0.0'
+  creationTimestamp: "2023-08-10T16:25:18Z"
+  generateName: map-reduce-
+  generation: 1
+  labels:
+    workflows.argoproj.io/creator: "112251210534458906530"
+  name: test-map-reduce
+  namespace: workflows
+  resourceVersion: "220431546"
+  uid: cfd3f363-8120-4a05-99d9-90043321c1f1
+spec:
+  arguments:
+    parameters:
+    - name: numParts
+      value: "4"
+  entrypoint: main
+  templates:
+  - dag:
+      tasks:
+      - arguments:
+          parameters:
+          - name: numParts
+            value: '{{workflow.parameters.numParts}}'
+        name: split
+        template: split
+      - arguments:
+          artifacts:
+          - gcs:
+              bucket: argo_artifacts_ciroh
+              key: '{{workflow.name}}/parts/{{item}}.json'
+              serviceAccountKeySecret:
+                key: serviceAccountKey
+                name: my-gcs-creds
+            name: part
+          parameters:
+          - name: partId
+            value: '{{item}}'
+        depends: split
+        name: map
+        template: map
+        withParam: '{{tasks.split.outputs.result}}'
+      - arguments: {}
+        depends: map
+        name: reduce
+        template: reduce
+    inputs: {}
+    metadata: {}
+    name: main
+    outputs: {}
+  - inputs:
+      parameters:
+      - name: numParts
+    metadata: {}
+    name: split
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        gcs:
+          bucket: argo_artifacts_ciroh
+          key: '{{workflow.name}}/parts'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: parts
+        path: /mnt/out
+    script:
+      command:
+      - python
+      image: python:alpine3.6
+      name: ""
+      resources: {}
+      source: |
+        import json
+        import os
+        import sys
+        os.mkdir("/mnt/out")
+        partIds = list(map(lambda x: str(x), range({{inputs.parameters.numParts}})))
+        for i, partId in enumerate(partIds, start=1):
+          with open("/mnt/out/" + partId + ".json", "w") as f:
+            json.dump({"foo": i}, f)
+        json.dump(partIds, sys.stdout)
+  - inputs:
+      artifacts:
+      - name: part
+        path: /mnt/in/part.json
+      parameters:
+      - name: partId
+    metadata: {}
+    name: map
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        gcs:
+          bucket: argo_artifacts_ciroh
+          key: '{{workflow.name}}/results/{{inputs.parameters.partId}}.json'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: part
+        path: /mnt/out/part.json
+    script:
+      command:
+      - python
+      image: python:alpine3.6
+      name: ""
+      resources: {}
+      source: |
+        import json
+        import os
+        import sys
+        os.mkdir("/mnt/out")
+        with open("/mnt/in/part.json") as f:
+          part = json.load(f)
+        with open("/mnt/out/part.json", "w") as f:
+          json.dump({"bar": part["foo"] * 2}, f)
+  - inputs:
+      artifacts:
+      - gcs:
+          bucket: argo_artifacts_ciroh
+          key: '{{workflow.name}}/results'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: results
+        path: /mnt/in
+    metadata: {}
+    name: reduce
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        gcs:
+          bucket: argo_artifacts_ciroh
+          key: '{{workflow.name}}/total.json'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: total
+        path: /mnt/out/total.json
+    script:
+      command:
+      - python
+      image: python:alpine3.6
+      name: ""
+      resources: {}
+      source: |
+        import json
+        import os
+        import sys
+        total = 0
+        os.mkdir("/mnt/out")
+        for f in list(map(lambda x: open("/mnt/in/" + x), os.listdir("/mnt/in"))):
+          result = json.load(f)
+          total = total + result["bar"]
+        with open("/mnt/out/total.json" , "w") as f:
+          json.dump({"total": total}, f)

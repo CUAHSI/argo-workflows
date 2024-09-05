@@ -1,0 +1,103 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  creationTimestamp: "2023-07-25T19:22:30Z"
+  generateName: collect-aorc-forcing-v1-
+  generation: 17
+  labels:
+    workflows.argoproj.io/creator: "112251210534458906530"
+  name: collect-aorc-forcing-v1
+  namespace: workflows
+  resourceVersion: "218377027"
+  uid: fa1dea38-9315-4529-82c3-70e3167cdfcf
+spec:
+  arguments:
+    parameters:
+    - name: start-date
+      value: "2010-01-01 00:00:00"
+    - name: end-date
+      value: "2010-01-01 01:00:00"
+    - name: shapefile-bucket
+      value: subsetter-outputs
+    - name: shapefile-path
+      value: q1w2e3r4t5y6u7i8o9p0
+    - name: watershed-filename
+      value: watershed.shp
+    - name: job-id
+      value: qwerty
+    - name: output-bucket
+      value: subsetter-outputs
+    - name: output-path
+      value: aorc
+    - name: dask-workers-count
+      value: "4"
+    - name: dask-worker-memory
+      value: 3GB
+    - name: timesteps-per-group
+      value: "10"
+  entrypoint: collect-aorc
+  templateDefaults:
+    inputs: {}
+    metadata: {}
+    outputs: {}
+    retryStrategy:
+      limit: "0"
+    timeout: 600s
+  templates:
+  - container:
+      args:
+      - '{{inputs.parameters.start-date}}'
+      - '{{inputs.parameters.end-date}}'
+      - /srv/shp-data/watershed.shp
+      - /srv/output
+      - --num-workers={{dask-workers-count}}
+      - --worker-mem-limit={{dask-workers-memory}}
+      - --timesteps-per-group={{timesteps-per-group}}
+      - --verbose
+      command:
+      - python
+      - -u
+      - entry.py
+      image: cuahsi/aorc:latest
+      name: ""
+      ports:
+      - containerPort: 8787
+      resources:
+        requests:
+          cpu: "2"
+          ephemeral-storage: 10Gi
+          memory: 16Gi
+    inputs:
+      artifacts:
+      - gcs:
+          bucket: '{{inputs.parameters.shapefile-bucket}}'
+          key: '{{inputs.parameters.shapefile-path}}/'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: shapefile-input
+        path: /srv/shp-data
+      parameters:
+      - name: start-date
+      - name: end-date
+      - name: shapefile-bucket
+      - name: shapefile-path
+      - name: watershed-filename
+      - name: job-id
+      - name: output-bucket
+      - name: output-path
+      - name: dask-workers-count
+      - name: dask-worker-memory
+      - name: timesteps-per-group
+    metadata: {}
+    name: collect-aorc
+    outputs:
+      artifacts:
+      - gcs:
+          bucket: '{{inputs.parameters.output-bucket}}'
+          key: '{{inputs.parameters.output-path}}/{{inputs.parameters.job-id}}.tar.gz'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: aorc-output
+        path: /srv/output
