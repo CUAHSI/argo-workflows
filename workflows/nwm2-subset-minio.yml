@@ -120,6 +120,8 @@ spec:
             name: my-gcs-creds
         name: subset-results
         path: /srv/output
+        archive:
+          none: {}
   volumes:
   - name: subsetter-data-volume
     persistentVolumeClaim:
