@@ -3,7 +3,7 @@ kind: WorkflowTemplate
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-08-10T16:26:40Z","generateName":"test-dask-","generation":15,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"112251210534458906530"},"name":"test-dask","namespace":"workflows","resourceVersion":"220464407","uid":"d23dc5ee-fd76-4aaa-b86b-564b0dcd2ebf"},"spec":{"arguments":{},"entrypoint":"dask-test-script","templates":[{"inputs":{},"metadata":{},"name":"dask-test-script","outputs":{},"script":{"command":["python"],"image":"ghcr.io/dask/dask","name":"main","ports":[{"containerPort":8787}],"resources":{"requests":{"cpu":"2","ephemeral-storage":"10Gi","memory":"6Gi"}},"source":"import dask.bag as db\nfrom operator import add\nfrom dask.distributed import Client, progress\n\nif __name__ == \"__main__\":\n  client = Client(n_workers=3, memory_limit='2GB')\n  print(client)\n\n  b = db.from_sequence(range(0, 5000), npartitions=1)\n  res = b.map(add, b).compute()\n  print(sum(res))\n"}}],"ttlStrategy":{"secondsAfterCompletion":300},"workflowMetadata":{"labels":{"example":"true"}}}}
+      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-08-10T16:26:40Z","generateName":"test-dask-","generation":15,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"112251210534458906530"},"name":"test-dask","namespace":"workflows","resourceVersion":"629806721","uid":"d23dc5ee-fd76-4aaa-b86b-564b0dcd2ebf"},"spec":{"arguments":{},"entrypoint":"dask-test-script","templates":[{"inputs":{},"metadata":{},"name":"dask-test-script","outputs":{},"script":{"command":["python"],"image":"ghcr.io/dask/dask","name":"main","ports":[{"containerPort":8787}],"resources":{"requests":{"cpu":"2","ephemeral-storage":"10Gi","memory":"6Gi"}},"source":"import dask.bag as db\nfrom operator import add\nfrom dask.distributed import Client, progress\n\nif __name__ == \"__main__\":\n  client = Client(n_workers=3, memory_limit='2GB')\n  print(client)\n\n  b = db.from_sequence(range(0, 5000), npartitions=1)\n  res = b.map(add, b).compute()\n  print(sum(res))\n"}}],"ttlStrategy":{"secondsAfterCompletion":300},"workflowMetadata":{"labels":{"example":"true"}}}}
   creationTimestamp: "2023-08-10T16:26:40Z"
   generateName: test-dask-
   generation: 15
@@ -12,7 +12,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: test-dask
   namespace: workflows
-  resourceVersion: "629806721"
+  resourceVersion: "636518005"
   uid: d23dc5ee-fd76-4aaa-b86b-564b0dcd2ebf
 spec:
   arguments: {}
