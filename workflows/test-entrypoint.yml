@@ -1,13 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-08-10T16:26:01Z","generation":1,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"112251210534458906530"},"name":"test-entrypoint","namespace":"workflows","resourceVersion":"220432018","uid":"3f4b7cc3-14d8-4e42-9540-32115e70a5df"},"spec":{"arguments":{"parameters":[{"name":"message","value":"hello argo"}]},"entrypoint":"argosay","podGC":{"strategy":"OnPodCompletion"},"templates":[{"inputs":{"parameters":[{"name":"message","value":"{{workflow.parameters.message}}"}]},"metadata":{},"name":"argosay","outputs":{},"script":{"command":["python"],"image":"cuahsi/aorc:latest","name":"main","resources":{},"source":"import os, sys\n\n# make sure that entry.py is in the path.\n# I have no idea why this is necessary since we're already\n# in the /srv directory, but it won't work without it.\n\nsys.path.append('/srv')\n\nprint(os.getcwd())\n\nsys.stdout.write('Spam \u0026 Eggs\\n\\n')\n\nfor f in os.listdir():\n\n    sys.stdout.write(f + '\\n')\n\n\nimport entry\n    \n"}}],"ttlStrategy":{"secondsAfterCompletion":300},"workflowMetadata":{"labels":{"example":"true"}}}}
   creationTimestamp: "2023-08-10T16:26:01Z"
   generation: 1
   labels:
+    argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "112251210534458906530"
   name: test-entrypoint
   namespace: workflows
-  resourceVersion: "220432018"
+  resourceVersion: "629806723"
   uid: 3f4b7cc3-14d8-4e42-9540-32115e70a5df
 spec:
   arguments:
