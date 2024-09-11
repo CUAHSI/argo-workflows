@@ -64,13 +64,9 @@ spec:
           none: {}
         name: shape-results
         path: /output
-        s3:
-          accessKeySecret:
-            key: accessKey
-            name: minio-credentials
+        gcs:
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
           bucket: '{{inputs.parameters.output-bucket}}'
-          endpoint: api.minio.cuahsi.io
           key: '{{inputs.parameters.output-path}}'
-          secretKeySecret:
-            key: secretKey
-            name: minio-credentials

@@ -106,16 +106,12 @@ spec:
       artifacts:
       - name: subset-results
         path: /srv/output
-        s3:
-          accessKeySecret:
-            key: accessKey
-            name: minio-credentials
+        gcs:
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
           bucket: '{{inputs.parameters.output-bucket}}'
-          endpoint: api.minio.cuahsi.io
           key: '{{inputs.parameters.output-path}}'
-          secretKeySecret:
-            key: secretKey
-            name: minio-credentials
   volumes:
   - name: subsetter-data-volume
     persistentVolumeClaim:

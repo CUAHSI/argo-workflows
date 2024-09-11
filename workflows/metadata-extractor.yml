@@ -66,13 +66,9 @@ spec:
           none: {}
         name: output-metadata
         path: /tmp/resource/.hs
-        s3:
-          accessKeySecret:
-            key: accessKey
-            name: minio-credentials
+        gcs:
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
           bucket: '{{inputs.parameters.bucket}}'
-          endpoint: api.minio.cuahsi.io
           key: '{{inputs.parameters.input-path}}/.metadata'
-          secretKeySecret:
-            key: secretKey
-            name: minio-credentials
