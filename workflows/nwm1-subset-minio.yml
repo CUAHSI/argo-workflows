@@ -86,7 +86,7 @@ spec:
       - python
       - -u
       - entry.py
-      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:0.0.1
+      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:1.0
       name: ""
       resources: {}
       volumeMounts:
