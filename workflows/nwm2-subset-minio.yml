@@ -14,6 +14,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: nwm2-subset-minio
   namespace: workflows
+  resourceVersion: "636558328"
   uid: 799bf195-05b3-4911-8564-d47b43a41d8e
 spec:
   arguments:

@@ -13,6 +13,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: ngen-v2.0-subset-minio
   namespace: workflows
+  resourceVersion: "636543308"
   uid: 80c1a769-9a8b-42a1-af33-747afaf50b31
 spec:
   arguments:

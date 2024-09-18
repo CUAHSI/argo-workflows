@@ -16,6 +16,7 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: tonycastronova
   name: cfe-ngen-configure
   namespace: workflows
+  resourceVersion: "636543315"
   uid: 9bcceb8e-94ca-4f79-bd75-b9c7957f062c
 spec:
   arguments:

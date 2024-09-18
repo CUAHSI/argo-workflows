@@ -9,6 +9,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: test-entrypoint
   namespace: workflows
+  resourceVersion: "636543319"
   uid: 3f4b7cc3-14d8-4e42-9540-32115e70a5df
 spec:
   arguments:

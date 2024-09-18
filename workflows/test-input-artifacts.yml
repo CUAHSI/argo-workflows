@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: test-input-artifacts
   namespace: workflows
+  resourceVersion: "636543313"
   uid: 19bfb17a-80bb-4949-b830-d52ac6105547
 spec:
   arguments:

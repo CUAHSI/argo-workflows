@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: test-dask
   namespace: workflows
+  resourceVersion: "636543306"
   uid: d23dc5ee-fd76-4aaa-b86b-564b0dcd2ebf
 spec:
   arguments: {}

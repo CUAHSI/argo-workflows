@@ -15,6 +15,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: collect-aorc-forcing-v1.1
   namespace: workflows
+  resourceVersion: "636543318"
   uid: 7a3c73aa-b714-4a50-b42c-952be475f0d2
 spec:
   arguments:

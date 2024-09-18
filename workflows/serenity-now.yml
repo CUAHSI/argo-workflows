@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: serenity-now
   namespace: workflows
+  resourceVersion: "636543304"
   uid: ff159db1-9f92-468b-817e-511790e936ae
 spec:
   arguments: {}

@@ -9,6 +9,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: metadata-extractor
   namespace: workflows
+  resourceVersion: "636546242"
   uid: 7fef6a97-1f0c-4480-884e-ae68b1a0ce11
 spec:
   arguments:

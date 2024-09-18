@@ -15,6 +15,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: ngen-run
   namespace: workflows
+  resourceVersion: "636543310"
   uid: b57f683f-037f-419d-8334-f5578c5945a5
 spec:
   arguments:

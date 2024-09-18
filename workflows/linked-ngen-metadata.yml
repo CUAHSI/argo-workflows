@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: linked-ngen-metadata
   namespace: workflows
+  resourceVersion: "636543324"
   uid: 8954f34f-d60c-4b77-9054-9643ec3c3d39
 spec:
   arguments:

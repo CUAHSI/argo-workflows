@@ -9,6 +9,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: cge-configure
   namespace: workflows
+  resourceVersion: "636543325"
   uid: 99d31ef5-b5db-4f74-af52-4894fbea81a0
 spec:
   arguments:

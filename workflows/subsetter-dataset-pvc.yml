@@ -9,6 +9,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: subsetter-dataset-pvc
   namespace: workflows
+  resourceVersion: "636543311"
   uid: 8c6de0ec-5177-47e9-a3b8-60ec40a1c866
 spec:
   arguments: {}

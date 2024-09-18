@@ -15,6 +15,7 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: sblack
   name: run-cfe-complete
   namespace: workflows
+  resourceVersion: "636543317"
   uid: 93bde55d-43b0-4dd9-8295-ab625fc0eba1
 spec:
   arguments:

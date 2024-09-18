@@ -12,6 +12,7 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: sblack-admin
   name: omniscient-rhino
   namespace: workflows
+  resourceVersion: "636543305"
   uid: c1ed8948-f419-420d-9ebe-3ddc90164dc3
 spec:
   arguments:

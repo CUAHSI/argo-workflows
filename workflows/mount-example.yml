@@ -9,6 +9,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: mount-example
   namespace: workflows
+  resourceVersion: "636543303"
   uid: a143c279-4dcd-4829-9426-fdf1ac5d89e8
 spec:
   arguments: {}

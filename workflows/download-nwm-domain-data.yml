@@ -12,6 +12,7 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: tonycastronova
   name: download-nwm-domain-data
   namespace: workflows
+  resourceVersion: "636543326"
   uid: 315aac4f-01e0-4c40-9558-3a037fd39ba5
 spec:
   arguments:

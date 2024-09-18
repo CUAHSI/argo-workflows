@@ -14,6 +14,7 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: parflow-subset-v1-by-huc-minio
   namespace: workflows
+  resourceVersion: "636818133"
   uid: a67b1da4-62a6-411b-a521-032bc2bd97a7
 spec:
   arguments:

@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: s3-data-download
   namespace: workflows
+  resourceVersion: "636543307"
   uid: caad7c3e-ceff-4388-a26c-d6bb4053db28
 spec:
   arguments:

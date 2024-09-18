@@ -10,6 +10,7 @@ metadata:
     workflows.argoproj.io/creator: "112251210534458906530"
   name: map-reduce-aorc
   namespace: workflows
+  resourceVersion: "636543327"
   uid: 6f76a23a-2c62-4d47-a3a7-e8a5f91a0cca
 spec:
   arguments:
