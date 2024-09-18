@@ -2,8 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-01-07T07:04:44Z","generation":1,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"collect-aorc-forcing-full-v1.1","namespace":"workflows","resourceVersion":"629806727","uid":"4f5230b1-6b73-4316-b085-07868548b8c0"},"spec":{"arguments":{"parameters":[{"name":"start-date","value":"2020-01-01"},{"name":"end-date","value":"2020-01-2"},{"name":"output-path","value":"templatetest"},{"name":"output-bucket","value":"sblack"},{"name":"hucs","value":"102600070103,102600070104,102600090205,102600050206,102600070102"},{"name":"aorc-secret","value":"changethis"},{"name":"shape-file-path","value":"shape.gz"}]},"entrypoint":"aorc-subset-huc","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"0"},"timeout":"600s"},"templates":[{"inputs":{"parameters":[{"name":"start-date","value":"{{workflow.parameters.start-date}}"},{"name":"end-date","value":"{{workflow.parameters.end-date}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"hucs","value":"{{workflow.parameters.hucs}}"},{"name":"aorc-secret","value":"{{workflow.parameters.aorc-secret}}"},{"name":"shape-file-path","value":"{{workflow.parameters.shape-file-path}}"}]},"metadata":{},"name":"aorc-subset-huc","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"output-path","value":"{{inputs.parameters.output-path}}"},{"name":"output-bucket","value":"{{inputs.parameters.output-bucket}}"},{"name":"hucs","value":"{{inputs.parameters.hucs}}"}]},"name":"huc-to-shp","templateRef":{"name":"huc-to-shp","template":"huc-to-shp"}}],[{"arguments":{"parameters":[{"name":"start-date","value":"{{workfinputslow.parameters.start-date}}"},{"name":"end-date","value":"{{inputs.parameters.end-date}}"},{"name":"output-path","value":"{{inputs.parameters.output-path}}"},{"name":"shape-file-path","value":"{{inputs.parameters.output-path}}/{{inputs.parameters.shape-file-path}}"},{"name":"aorc-secret","value":"{{inputs.parameters.aorc-secret}}"}]},"name":"collect-aorc-forcing","templateRef":{"name":"collect-aorc-forcing-v1.1","template":"collect-aorc"}}],[{"arguments":{"parameters":[{"name":"bucket","value":"subsetter-outputs"},{"name":"path","value":"{{inputs.parameters.output-path}}/aorc_output.gz"},{"name":"output-path","value":"{{inputs.parameters.output-path}}/metadata.gz"}]},"name":"metadata-extraction","templateRef":{"name":"metadata-extractor","template":"metadata-extractor"}}]]}]}}
   creationTimestamp: "2024-01-07T07:04:44Z"
   generation: 1
   labels:
@@ -11,7 +9,6 @@ metadata:
     workflows.argoproj.io/creator: "116317613255759624565"
   name: collect-aorc-forcing-full-v1.1
   namespace: workflows
-  resourceVersion: "636517993"
   uid: 4f5230b1-6b73-4316-b085-07868548b8c0
 spec:
   arguments:
