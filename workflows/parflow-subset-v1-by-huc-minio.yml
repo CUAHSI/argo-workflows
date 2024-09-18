@@ -7,15 +7,11 @@ metadata:
       hydrologic unit codes.
     cuahsi/longname: Subset Parflow CONUS v1.0
     cuahsi/version: "1.0"
-  creationTimestamp: "2024-01-25T23:18:01Z"
-  generation: 8
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "116317613255759624565"
   name: parflow-subset-v1-by-huc-minio
   namespace: workflows
-  resourceVersion: "636818133"
-  uid: a67b1da4-62a6-411b-a521-032bc2bd97a7
 spec:
   arguments:
     parameters:

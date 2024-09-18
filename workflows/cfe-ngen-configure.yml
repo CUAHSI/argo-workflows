@@ -7,8 +7,6 @@ metadata:
       repositories. Configurations are created using default parameters.
     cuahsi/longname: Configure CFE for NGEN
     cuahsi/version: "0.1"
-  creationTimestamp: "2024-05-08T13:57:56Z"
-  generation: 14
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: ca03bcc9-668f-460a-adf9-5263842d10c4
@@ -16,8 +14,6 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: tonycastronova
   name: cfe-ngen-configure
   namespace: workflows
-  resourceVersion: "636543315"
-  uid: 9bcceb8e-94ca-4f79-bd75-b9c7957f062c
 spec:
   arguments:
     parameters:

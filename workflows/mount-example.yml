@@ -2,14 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-  creationTimestamp: "2024-01-16T18:34:03Z"
-  generation: 1
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "116317613255759624565"
   name: mount-example
   namespace: workflows
-  resourceVersion: "636543303"
-  uid: a143c279-4dcd-4829-9426-fdf1ac5d89e8
 spec:
   arguments: {}

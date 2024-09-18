@@ -5,8 +5,6 @@ metadata:
     cuahsi/description: |
       This workflow configures and runs a coupled model simulation within the NOAA OWP  NextGen Modeling System. The models consists of the three components: SLOTH, CFE, and T-Route.  All model components are configured with default parameterizations.
     cuahsi/longname: Run Complete CFE Simulation (Testing new path)
-  creationTimestamp: "2024-05-23T15:29:45Z"
-  generation: 14
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: 77ab83ee-ff41-4fed-b431-79188fff11aa
@@ -14,8 +12,6 @@ metadata:
     workflows.argoproj.io/creator-preferred-username: sblack
   name: run-cfe-complete-new-path
   namespace: workflows
-  resourceVersion: "636543328"
-  uid: 7ba932ab-d384-4b56-a828-32a4d7c4a7a3
 spec:
   arguments:
     parameters:

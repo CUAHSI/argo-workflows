@@ -7,15 +7,11 @@ metadata:
       of  a bounding box in the CRS of the NWM domain data.
     cuahsi/longname: Subset NWM v1.0
     cuahsi/version: "1.0"
-  creationTimestamp: "2024-01-25T23:16:38Z"
-  generation: 7
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "116317613255759624565"
   name: nwm1-subset-minio
   namespace: workflows
-  resourceVersion: "638708467"
-  uid: da2b626f-b8a0-496e-8a41-c56a88bf1fb9
 spec:
   arguments:
     parameters:

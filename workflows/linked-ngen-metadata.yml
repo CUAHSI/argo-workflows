@@ -2,16 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-  creationTimestamp: "2023-07-18T19:45:38Z"
-  generation: 2
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
     workflows.argoproj.io/creator: "112251210534458906530"
   name: linked-ngen-metadata
   namespace: workflows
-  resourceVersion: "636543324"
-  uid: 8954f34f-d60c-4b77-9054-9643ec3c3d39
 spec:
   arguments:
     parameters:

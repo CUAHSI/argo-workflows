@@ -8,15 +8,11 @@ metadata:
       image.
     cuahsi/longname: Execute NextGen in a Box (NGIAB)
     cuahsi/version: "0.1"
-  creationTimestamp: "2023-12-21T20:20:45Z"
-  generation: 22
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "112251210534458906530"
   name: ngen-run
   namespace: workflows
-  resourceVersion: "636543310"
-  uid: b57f683f-037f-419d-8334-f5578c5945a5
 spec:
   arguments:
     parameters:

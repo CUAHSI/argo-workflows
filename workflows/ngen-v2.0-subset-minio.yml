@@ -5,16 +5,12 @@ metadata:
     cuahsi/description: |
       This workflow subsets the NextGen HydroFabric for an area of interest defined by a waterbody identifier. The data that this workflow  operates on can be found at https://www.lynker-spatial.com/data?path=hydrofabric.
     cuahsi/longname: NextGen HydroFabric Subsetting
-  creationTimestamp: "2023-12-01T14:47:35Z"
-  generation: 14
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
     workflows.argoproj.io/creator: "112251210534458906530"
   name: ngen-v2.0-subset-minio
   namespace: workflows
-  resourceVersion: "636543308"
-  uid: 80c1a769-9a8b-42a1-af33-747afaf50b31
 spec:
   arguments:
     parameters:

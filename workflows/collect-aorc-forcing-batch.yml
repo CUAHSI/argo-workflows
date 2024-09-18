@@ -2,16 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-  creationTimestamp: "2023-07-25T20:58:46Z"
   generateName: batch-aorc-
-  generation: 12
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "112251210534458906530"
   name: collect-aorc-forcing-batch
   namespace: workflows
-  resourceVersion: "636543321"
-  uid: 1dea0358-00d9-4ae2-bfde-03aba76b15d1
 spec:
   arguments:
     parameters:

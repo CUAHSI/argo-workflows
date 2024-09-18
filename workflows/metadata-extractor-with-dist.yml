@@ -2,15 +2,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-  creationTimestamp: "2023-11-30T22:05:00Z"
-  generation: 4
   labels:
     argocd.argoproj.io/instance: workflows-sync
     workflows.argoproj.io/creator: "116317613255759624565"
   name: metadata-extractor-with-dist
   namespace: workflows
-  resourceVersion: "636543320"
-  uid: fe409969-bda8-406b-862c-9032e2c881d3
 spec:
   arguments:
     parameters:
