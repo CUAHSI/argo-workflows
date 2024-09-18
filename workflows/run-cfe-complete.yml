@@ -8,7 +8,6 @@ metadata:
     cuahsi/version: "0.1"
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: 77ab83ee-ff41-4fed-b431-79188fff11aa
     workflows.argoproj.io/creator-email: sblack.at.cuahsi.org
     workflows.argoproj.io/creator-preferred-username: sblack
   name: run-cfe-complete

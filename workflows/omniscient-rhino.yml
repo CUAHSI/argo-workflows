@@ -5,7 +5,6 @@ metadata:
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: 30b048f0-6a97-422c-82de-f6af4f56ad5a
     workflows.argoproj.io/creator-email: scootna-admin.at.gmail.com
     workflows.argoproj.io/creator-preferred-username: sblack-admin
   name: omniscient-rhino

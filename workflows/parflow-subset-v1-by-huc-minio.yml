@@ -9,7 +9,6 @@ metadata:
     cuahsi/version: "1.0"
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: parflow-subset-v1-by-huc-minio
   namespace: workflows
 spec:

@@ -11,7 +11,6 @@ metadata:
   generateName: map-reduce-
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: test-map-reduce
   namespace: workflows
 spec:

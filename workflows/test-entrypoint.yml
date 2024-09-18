@@ -4,7 +4,6 @@ metadata:
   annotations:
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: test-entrypoint
   namespace: workflows
 spec:

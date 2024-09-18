@@ -5,7 +5,6 @@ metadata:
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: ca03bcc9-668f-460a-adf9-5263842d10c4
     workflows.argoproj.io/creator-email: castronova.anthony.at.gmail.com
     workflows.argoproj.io/creator-preferred-username: tonycastronova
   name: download-nwm-domain-data

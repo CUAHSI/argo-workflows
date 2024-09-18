@@ -4,7 +4,6 @@ metadata:
   annotations:
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
     sblack.test/metadata: "boo"
   name: huc-to-shp
   namespace: workflows

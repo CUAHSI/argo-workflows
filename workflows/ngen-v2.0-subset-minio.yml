@@ -8,7 +8,6 @@ metadata:
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: ngen-v2.0-subset-minio
   namespace: workflows
 spec:
