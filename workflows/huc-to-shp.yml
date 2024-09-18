@@ -2,17 +2,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-01-07T06:55:03Z","generation":12,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"huc-to-shp","namespace":"workflows","resourceVersion":"629806712","uid":"14466b94-2cb1-4960-9e51-4b4ab14c9ca2"},"spec":{"arguments":{"parameters":[{"name":"output-path","value":"qwerty"},{"name":"output-bucket","value":"subsetter-outputs"},{"name":"hucs","value":"102600070103,102600070104,102600090205,102600050206"}]},"entrypoint":"huc-to-shp","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"0"},"timeout":"600s"},"templates":[{"container":{"args":["{{inputs.parameters.hucs}}","/output/watershed.shp"],"image":"us-central1-docker.pkg.dev/apps-320517/subsetter/huc-to-shp:0.0.4","name":"","resources":{}},"inputs":{"parameters":[{"default":"subsetter-outputs","description":"S3 bucket to save workflow outputs","name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"},{"default":"qwerty","description":"Path within the `output-bucket` to save outputs","name":"output-path","value":"{{workflow.parameters.output-path}}"},{"default":"102600070103","description":"List of 12-digit HUC parameters to generate a shapefile for","name":"hucs","value":"{{workflow.parameters.hucs}}"}]},"metadata":{"annotations":{"description":"This is a sample description\n","docstring":"This is my docstring input -\u003e value \noutput -\u003e value\n"}},"name":"huc-to-shp","outputs":{"artifacts":[{"archive":{"none":{}},"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"shape-results","path":"/output"}]}}]}}
-  creationTimestamp: "2024-01-07T06:55:03Z"
   generation: 13
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: huc-to-shp
   namespace: workflows
-  resourceVersion: "636518008"
-  uid: 14466b94-2cb1-4960-9e51-4b4ab14c9ca2
 spec:
   arguments:
     parameters:
