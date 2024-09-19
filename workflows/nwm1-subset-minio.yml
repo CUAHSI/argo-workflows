@@ -14,6 +14,13 @@ metadata:
 spec:
   arguments:
     parameters:
+    - description: NWM Model Version
+      name: model_version
+      value: v1.2.4
+      enum:
+      - v1.2.4
+      - v2.0.0
+      - v3.0.6
     - description: South boundary of the bounding box.
       name: y_south
       value: "382582.18746"
@@ -41,8 +48,8 @@ spec:
     steps:
     - - arguments:
           parameters:
-          - name: separator
-            value: --
+          - name: model_version
+            value: '{{workflow.parameters.model_version}}'
           - name: output-path
             value: '{{workflow.parameters.output-path}}'
           - name: y_south
@@ -75,13 +82,13 @@ spec:
       - '{{inputs.parameters.x_west}}'
       - '{{inputs.parameters.y_north}}'
       - '{{inputs.parameters.x_east}}'
-      - /srv/domain/nwm.v1.2.4/input
+      - '/srv/domain/nwm.{{inputs.parameters.model_version}}/input'
       - /srv/output
       command:
       - python
       - -u
       - entry.py
-      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm:1.0
+      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:1.0
       name: ""
       resources: {}
       volumeMounts:
@@ -89,7 +96,7 @@ spec:
         name: subsetter-data-volume
     inputs:
       parameters:
-      - name: separator
+      - name: model_version
       - name: y_south
       - name: x_west
       - name: y_north
@@ -108,6 +115,8 @@ spec:
             name: my-gcs-creds
         name: subset-results
         path: /srv/output
+        archive:
+          none: {}
   volumes:
   - name: subsetter-data-volume
     persistentVolumeClaim:
