@@ -7,17 +7,10 @@ metadata:
       hydrologic unit codes.
     cuahsi/longname: Subset Parflow CONUS v1.0
     cuahsi/version: "1.0"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{"cuahsi/description":"This workflow subsets the Parflow CONUS v1 domain data for a specified region. The region of interest is specified as a list of 12-digit hydrologic unit codes.","cuahsi/longname":"Subset Parflow CONUS v1.0","cuahsi/version":"1.0"},"creationTimestamp":"2024-01-25T23:18:01Z","generation":4,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"parflow-subset-v1-by-huc-minio","namespace":"workflows","resourceVersion":"629806720","uid":"a67b1da4-62a6-411b-a521-032bc2bd97a7"},"spec":{"arguments":{"parameters":[{"description":"User-provided name for the output subset data.","name":"label","value":"pf-subset-job"},{"description":"Path relative to 'output-bucket' for where output files will be saved.","name":"output-path","value":"abc123"},{"description":"Name of cloud bucket for which output results will be saved","name":"output-bucket","value":"subsetter-outputs"},{"description":"List of 12-digit HUCs that define the region(s) to subset the Parflow CONUS domain.","name":"hucs","value":"102600070103,102600070104,102600090205,102600050206,102600070102"}]},"entrypoint":"parflow-subset-huc","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"2"},"timeout":"600s"},"templates":[{"inputs":{},"metadata":{},"name":"parflow-subset-huc","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"hucs","value":"{{workflow.parameters.hucs}}"}]},"name":"huc-to-shp","templateRef":{"name":"huc-to-shp","template":"huc-to-shp"}}],[{"arguments":{"parameters":[{"name":"label","value":"{{workflow.parameters.label}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"}]},"name":"subset-parflow","template":"parflow-subset-v1"}],[{"arguments":{"parameters":[{"name":"bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"input-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}_metadata.tgz"}]},"name":"metadata-extraction","templateRef":{"name":"metadata-extractor","template":"metadata-extractor"}}]]},{"container":{"args":["{{inputs.parameters.label}}","/srv/shape/watershed.shp","/srv/input/pfconus.v1.0/input","/srv/shape"],"command":["python","-u","entry.py"],"image":"cuahsi/parflow-subset-argo:v1","name":"","resources":{"limits":{"cpu":"2","ephemeral-storage":"2Gi","memory":"1Gi"},"requests":{"cpu":"1","ephemeral-storage":"1Gi","memory":"1Gi"}},"volumeMounts":[{"mountPath":"/srv/input","name":"subsetter-data-volume"}]},"inputs":{"artifacts":[{"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"shape-input-data","path":"/srv/shape"}],"parameters":[{"name":"label"},{"name":"output-path"},{"name":"output-bucket"}]},"metadata":{},"name":"parflow-subset-v1","outputs":{"artifacts":[{"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"subset-results","path":"/srv/shape"}]}}],"volumes":[{"name":"subsetter-data-volume","persistentVolumeClaim":{"claimName":"subset-accelerator"}}]}}
-  creationTimestamp: "2024-01-25T23:18:01Z"
-  generation: 5
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: parflow-subset-v1-by-huc-minio
   namespace: workflows
-  resourceVersion: "636517997"
-  uid: a67b1da4-62a6-411b-a521-032bc2bd97a7
 spec:
   arguments:
     parameters:
@@ -71,18 +64,6 @@ spec:
             value: '{{workflow.parameters.output-bucket}}'
         name: subset-parflow
         template: parflow-subset-v1
-    - - arguments:
-          parameters:
-          - name: bucket
-            value: '{{workflow.parameters.output-bucket}}'
-          - name: input-path
-            value: '{{workflow.parameters.output-path}}'
-          - name: output-path
-            value: '{{workflow.parameters.output-path}}_metadata.tgz'
-        name: metadata-extraction
-        templateRef:
-          name: metadata-extractor
-          template: metadata-extractor
   - container:
       args:
       - '{{inputs.parameters.label}}'
@@ -133,8 +114,6 @@ spec:
             name: my-gcs-creds
         name: subset-results
         path: /srv/shape
-        archive:
-          none: {}
   volumes:
   - name: subsetter-data-volume
     persistentVolumeClaim:

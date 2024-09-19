@@ -2,18 +2,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-07-25T20:58:46Z","generateName":"batch-aorc-","generation":12,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"112251210534458906530"},"name":"collect-aorc-forcing-batch","namespace":"workflows","resourceVersion":"629806711","uid":"1dea0358-00d9-4ae2-bfde-03aba76b15d1"},"spec":{"arguments":{"parameters":[{"name":"shapefile-bucket","value":"subsetter-outputs"},{"name":"shapefile-path","value":"q1w2e3r4t5y6u7i8o9p0"},{"name":"watershed-filename","value":"watershed.shp"},{"name":"job-id","value":"qwerty"},{"name":"output-bucket","value":"subsetter-outputs"},{"name":"output-path","value":"aorc"},{"name":"dask-worker-count","value":"4"},{"name":"dask-worker-memory","value":"3GB"},{"name":"timesteps-per-group","value":"10"}]},"entrypoint":"batch-aorc","templates":[{"inputs":{},"metadata":{},"name":"batch-aorc","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"start-date","value":"{{item.start-date}}"},{"name":"end-date","value":"{{item.end-date}}"},{"name":"shapefile-bucket","value":"subsetter-outputs"},{"name":"shapefile-path","value":"q1w2e3r4t5y6u7i8o9p0"},{"name":"watershed-filename","value":"watershed.shp"},{"name":"job-id","value":"qwerty"},{"name":"output-bucket","value":"subsetter-outputs"},{"name":"output-path","value":"aorc"},{"name":"dask-worker-count","value":"4"},{"name":"dask-worker-memory","value":"3GB"},{"name":"timesteps-per-group","value":"10"}]},"name":"process-aorc-batch","template":"collect-aorc","withItems":[{"end-date":"2010-01-04 23:00:00","start-date":"2010-01-01 00:00:00"},{"end-date":"2010-01-08 23:00:00","start-date":"2010-01-05 00:00:00"},{"end-date":"2010-01-12 23:00:00","start-date":"2010-01-09 00:00:00"}]}]]},{"container":{"args":["{{inputs.parameters.start-date}}","{{inputs.parameters.end-date}}","/srv/shp-data/watershed.shp","/srv/output","--num-workers={{inputs.parameters.dask-worker-count}}","--worker-mem-limit={{inputs.parameters.dask-worker-memory}}","--timesteps-per-group={{inputs.parameters.timesteps-per-group}}","--verbose"],"command":["python","-u","entry.py"],"image":"cuahsi/aorc:latest","name":"","ports":[{"containerPort":8787}],"resources":{"requests":{"cpu":"2","ephemeral-storage":"10Gi","memory":"16Gi"}}},"inputs":{"artifacts":[{"gcs":{"bucket":"{{inputs.parameters.shapefile-bucket}}","key":"{{inputs.parameters.shapefile-path}}/","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"shapefile-input","path":"/srv/shp-data"}],"parameters":[{"name":"start-date"},{"name":"end-date"},{"name":"shapefile-bucket"},{"name":"shapefile-path"},{"name":"watershed-filename"},{"name":"job-id"},{"name":"output-bucket"},{"name":"output-path"},{"name":"dask-worker-count"},{"name":"dask-worker-memory"},{"name":"timesteps-per-group"}]},"metadata":{},"name":"collect-aorc","outputs":{"artifacts":[{"archive":{"none":{}},"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}/{{inputs.parameters.job-id}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"aorc-output","path":"/srv/output"}]}}]}}
-  creationTimestamp: "2023-07-25T20:58:46Z"
   generateName: batch-aorc-
-  generation: 12
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: collect-aorc-forcing-batch
   namespace: workflows
-  resourceVersion: "636518004"
-  uid: 1dea0358-00d9-4ae2-bfde-03aba76b15d1
 spec:
   arguments:
     parameters:

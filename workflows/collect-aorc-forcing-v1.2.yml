@@ -2,17 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-01-07T18:20:06Z","generation":1,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"collect-aorc-forcing-v1.2","namespace":"workflows","resourceVersion":"629806713","uid":"98cb6588-e1b8-46cf-b032-794b88fe203b"},"spec":{"arguments":{"parameters":[{"name":"start-date","value":"2020-01-01"},{"name":"end-date","value":"2020-01-2"},{"name":"output-bucket","value":"subsetter_outputs"},{"name":"output_path","value":"sblack/qwerty"},{"name":"shape-file-path","value":"qwerty/shape.gz"},{"name":"aorc-secret","value":"changethis/zuFe6XApPIZrbnKWfliP"}]},"entrypoint":"collect-aorc","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"0"},"timeout":"600s"},"templates":[{"container":{"args":["python /app/collect-aorc-forcing-v1.1.py"],"command":["/bin/sh","-c"],"env":[{"name":"KEY","value":"AKIATL6IACWUADAFYDMC"},{"name":"SECRET","value":"{{inputs.parameters.aorc-secret}}"},{"name":"BUCKET_URL","value":"s3://aorc-v1.1-zarr-1-year/"},{"name":"SHAPE_FILE","value":"/srv/shp-data/watershed.shp"},{"name":"START_DATE","value":"{{inputs.parameters.start-date}}"},{"name":"END_DATE","value":"{{inputs.parameters.end-date}}"},{"name":"OUTPUT_FILE","value":"/output/results.nc"},{"name":"N_WORKERS","value":"2"},{"name":"MEMORY_LIMIT","value":"4GB"}],"image":"us-central1-docker.pkg.dev/apps-320517/subsetter/aorc:0.0.2","name":"","ports":[{"containerPort":8787}],"resources":{"requests":{"cpu":"2","ephemeral-storage":"10Gi","memory":"16Gi"}}},"inputs":{"artifacts":[{"name":"shapefile-input","path":"/srv/shp-data","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.output-bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.shape-file-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}],"parameters":[{"name":"shape-file-path","value":"{{workflow.parameters.shape-file-path}}"},{"name":"output-path","value":"{{workflow.parameters.output_path}}"},{"name":"start-date","value":"{{workflow.parameters.start-date}}"},{"name":"end-date","value":"{{workflow.parameters.end-date}}"},{"name":"aorc-secret","value":"{{workflow.parameters.aorc-secret}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"}]},"metadata":{},"name":"collect-aorc","outputs":{"artifacts":[{"archive":{"none":{}},"name":"aorc-output-artifact","path":"/output","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.output-bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.output-path}}/aorc_output.gz","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}]}}]}}
-  creationTimestamp: "2024-01-07T18:20:06Z"
-  generation: 1
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: collect-aorc-forcing-v1.2
   namespace: workflows
-  resourceVersion: "636517989"
-  uid: 98cb6588-e1b8-46cf-b032-794b88fe203b
 spec:
   arguments:
     parameters:

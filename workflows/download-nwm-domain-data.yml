@@ -2,20 +2,13 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-05-31T19:35:47Z","generation":15,"labels":{"argocd.argoproj.io/instance":"workflows-sync","example":"true","workflows.argoproj.io/creator":"ca03bcc9-668f-460a-adf9-5263842d10c4","workflows.argoproj.io/creator-email":"castronova.anthony.at.gmail.com","workflows.argoproj.io/creator-preferred-username":"tonycastronova"},"name":"download-nwm-domain-data","namespace":"workflows","resourceVersion":"629806717","uid":"315aac4f-01e0-4c40-9558-3a037fd39ba5"},"spec":{"arguments":{"parameters":[{"description":"URL to the location where domain data is located.","name":"paths"},{"description":"Name of the cloud bucket for which to save domain data.","name":"output-bucket","value":"scratch"},{"description":"Path within the 'output-bucket' to save domain data.","name":"output-path","value":"domain_data"}]},"entrypoint":"collect-data","podGC":{"strategy":"OnPodCompletion"},"templates":[{"inputs":{"parameters":[{"name":"paths","value":"{{workflow.parameters.paths}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"}]},"metadata":{},"name":"collect-data","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"data-path","value":"{{item}}"},{"name":"output-bucket","value":"{{inputs.parameters.output-bucket}}"},{"name":"output-path","value":"{{inputs.parameters.output-path}}"}]},"name":"download-data","template":"wget","withParam":"{{inputs.parameters.paths}}"}]]},{"container":{"args":["-r","-np","-R","index.html*","{{inputs.parameters.data-path}}","--directory-prefix=/srv","-nd"],"command":["wget"],"image":"cirrusci/wget:latest","name":"","resources":{}},"inputs":{"parameters":[{"name":"data-path"},{"name":"output-bucket"},{"name":"output-path"}]},"metadata":{},"name":"wget","outputs":{"artifacts":[{"archive":{"none":{}},"name":"output-data","path":"/srv","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.output-bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.output-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}]}}],"ttlStrategy":{"secondsAfterCompletion":300},"workflowMetadata":{}}}
-  creationTimestamp: "2024-05-31T19:35:47Z"
-  generation: 15
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: ca03bcc9-668f-460a-adf9-5263842d10c4
     workflows.argoproj.io/creator-email: castronova.anthony.at.gmail.com
     workflows.argoproj.io/creator-preferred-username: tonycastronova
   name: download-nwm-domain-data
   namespace: workflows
-  resourceVersion: "636517996"
-  uid: 315aac4f-01e0-4c40-9558-3a037fd39ba5
 spec:
   arguments:
     parameters:

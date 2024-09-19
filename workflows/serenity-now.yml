@@ -2,18 +2,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-07-17T21:06:43Z","generateName":"simple-test","generation":25,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"112251210534458906530"},"name":"serenity-now","namespace":"workflows","resourceVersion":"629806702","uid":"ff159db1-9f92-468b-817e-511790e936ae"},"spec":{"arguments":{},"entrypoint":"whalesay","securityContext":{"runAsNonRoot":true,"runAsUser":1000},"templates":[{"container":{"args":["ls /tmp/data | cowsay"],"command":["sh","-c"],"image":"docker/whalesay:latest","name":"","resources":{}},"inputs":{"artifacts":[{"gcs":{"bucket":"subsetter-static-input","key":"nwm.v1.2.4","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"input-data","path":"/tmp/data"}]},"metadata":{},"name":"whalesay","outputs":{}}]}}
-  creationTimestamp: "2023-07-17T21:06:43Z"
   generateName: simple-test
-  generation: 25
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: serenity-now
   namespace: workflows
-  resourceVersion: "636518001"
-  uid: ff159db1-9f92-468b-817e-511790e936ae
 spec:
   arguments: {}
   entrypoint: whalesay

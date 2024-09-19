@@ -2,17 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-01-22T17:42:28Z","generation":13,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"metadata-extractor-path","namespace":"workflows","resourceVersion":"629806715","uid":"97158f6c-6d05-41c6-be10-9a9ae62ca0c9"},"spec":{"arguments":{"parameters":[{"name":"bucket"},{"name":"input-path"},{"name":"output-path"},{"name":"base-url"}]},"entrypoint":"metadata-extractor","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"0"},"timeout":"3600s"},"templates":[{"container":{"args":["python3 hsextract/main.py extract /tmp/resource {{inputs.parameters.base-url}}"],"command":["/bin/sh","-c"],"image":"scootna/hsextract:0.5.2","name":"","resources":{}},"inputs":{"artifacts":[{"name":"input-data","path":"/tmp/resource","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.input-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}],"parameters":[{"name":"bucket","value":"{{workflow.parameters.bucket}}"},{"name":"input-path","value":"{{workflow.parameters.input-path}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"base-url","value":"{{workflow.parameters.base-url}}"}]},"metadata":{},"name":"metadata-extractor","outputs":{"artifacts":[{"name":"output-metadata","path":"/tmp/resource/.hs","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.output-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}]}}]}}
-  creationTimestamp: "2024-01-22T17:42:28Z"
-  generation: 13
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: metadata-extractor-path
   namespace: workflows
-  resourceVersion: "636518009"
-  uid: 97158f6c-6d05-41c6-be10-9a9ae62ca0c9
 spec:
   arguments:
     parameters:

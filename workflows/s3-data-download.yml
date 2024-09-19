@@ -2,18 +2,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-03-06T22:16:34Z","generation":34,"labels":{"argocd.argoproj.io/instance":"workflows-sync","example":"true","workflows.argoproj.io/creator":"112251210534458906530"},"name":"s3-data-download","namespace":"workflows","resourceVersion":"629806705","uid":"caad7c3e-ceff-4388-a26c-d6bb4053db28"},"spec":{"arguments":{"parameters":[{"name":"s3path","value":"s3://noaa-nws-owp-fim/hand_fim/fim_4_4_0_0/21020002/"},{"name":"output-bucket","value":"scratch"},{"name":"output-path","value":"hand_fim/"}]},"entrypoint":"aws-download","podGC":{"strategy":"OnPodCompletion"},"templates":[{"container":{"args":["echo $(basename '{{inputs.parameters.s3path}}') | xargs -I % aws s3 sync '{{inputs.parameters.s3path}}' /aws/% --request-payer\n"],"command":["/bin/bash","-c"],"env":[{"name":"AWS_ACCESS_KEY_ID","valueFrom":{"secretKeyRef":{"key":"accessKey","name":"aws-readonly-creds"}}},{"name":"AWS_SECRET_ACCESS_KEY","valueFrom":{"secretKeyRef":{"key":"secretKey","name":"aws-readonly-creds"}}},{"name":"AWS_DEFAULT_REGION","valueFrom":{"secretKeyRef":{"key":"aws-region","name":"aws-readonly-creds"}}}],"image":"amazon/aws-cli:2.15.26","name":"aws-container","resources":{}},"inputs":{"parameters":[{"name":"s3path","value":"{{workflow.parameters.s3path}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"}]},"metadata":{},"name":"aws-download","outputs":{"artifacts":[{"archive":{"none":{}},"name":"downloaded_data","path":"/aws","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.output-bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.output-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}]}}],"ttlStrategy":{"secondsAfterCompletion":300}}}
-  creationTimestamp: "2024-03-06T22:16:34Z"
-  generation: 34
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: "112251210534458906530"
   name: s3-data-download
   namespace: workflows
-  resourceVersion: "636517992"
-  uid: caad7c3e-ceff-4388-a26c-d6bb4053db28
 spec:
   arguments:
     parameters:

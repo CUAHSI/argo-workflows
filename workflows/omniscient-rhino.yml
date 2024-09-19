@@ -2,20 +2,13 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2024-05-13T16:34:55Z","generation":1,"labels":{"argocd.argoproj.io/instance":"workflows-sync","example":"true","workflows.argoproj.io/creator":"30b048f0-6a97-422c-82de-f6af4f56ad5a","workflows.argoproj.io/creator-email":"scootna-admin.at.gmail.com","workflows.argoproj.io/creator-preferred-username":"sblack-admin"},"name":"omniscient-rhino","namespace":"workflows","resourceVersion":"629806722","uid":"c1ed8948-f419-420d-9ebe-3ddc90164dc3"},"spec":{"arguments":{"parameters":[{"name":"message","value":"hello argo"}]},"entrypoint":"argosay","podGC":{"strategy":"OnPodCompletion"},"templates":[{"container":{"args":["echo","{{inputs.parameters.message}}"],"command":["/argosay"],"image":"argoproj/argosay:v2","name":"main","resources":{}},"inputs":{"parameters":[{"name":"message","value":"{{workflow.parameters.message}}"}]},"metadata":{},"name":"argosay","outputs":{}}],"ttlStrategy":{"secondsAfterCompletion":300},"workflowMetadata":{"labels":{"example":"true"}}}}
-  creationTimestamp: "2024-05-13T16:34:55Z"
-  generation: 1
   labels:
     argocd.argoproj.io/instance: workflows-sync
     example: "true"
-    workflows.argoproj.io/creator: 30b048f0-6a97-422c-82de-f6af4f56ad5a
     workflows.argoproj.io/creator-email: scootna-admin.at.gmail.com
     workflows.argoproj.io/creator-preferred-username: sblack-admin
   name: omniscient-rhino
   namespace: workflows
-  resourceVersion: "636517991"
-  uid: c1ed8948-f419-420d-9ebe-3ddc90164dc3
 spec:
   arguments:
     parameters:

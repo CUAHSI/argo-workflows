@@ -7,17 +7,10 @@ metadata:
       of  a bounding box in the CRS of the NWM domain data.
     cuahsi/longname: Subset NWM v1.0
     cuahsi/version: "1.0"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{"cuahsi/description":"This workflow subsets the National Water Model v1 domain data for a specified region. The region of interest is specified as the coordinates of  a bounding box in the CRS of the NWM domain data.","cuahsi/longname":"Subset NWM v1.0","cuahsi/version":"1.0"},"creationTimestamp":"2024-01-25T23:16:38Z","generation":2,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"nwm1-subset-minio","namespace":"workflows","resourceVersion":"629806709","uid":"da2b626f-b8a0-496e-8a41-c56a88bf1fb9"},"spec":{"arguments":{"parameters":[{"description":"South boundary of the bounding box.","name":"y_south","value":"382582.18746"},{"description":"West boundary of the bounding box.","name":"x_west","value":"1720355.72762"},{"description":"North boundary of the bounding box","name":"y_north","value":"367584.8784"},{"description":"East boundary of the bounding box.","name":"x_east","value":"1734488.4526"},{"description":"Path relative to 'subsetter-outputs' to save the output files.","name":"output-path","value":"asdf"},{"description":"Name of the cloud bucket to save output domain data.","name":"output-bucket","value":"subsetter-outputs"}]},"entrypoint":"nwm1-subset-with-extraction-template","templates":[{"inputs":{},"metadata":{},"name":"nwm1-subset-with-extraction-template","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"y_south","value":"{{workflow.parameters.y_south}}"},{"name":"x_west","value":"{{workflow.parameters.x_west}}"},{"name":"y_north","value":"{{workflow.parameters.y_north}}"},{"name":"x_east","value":"{{workflow.parameters.x_east}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"}]},"name":"nwm1-subset-step-name","template":"nwm1-subset-template"}],[{"arguments":{"parameters":[{"name":"bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"input-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}_metadata.tgz"}]},"name":"metadata-extraction","templateRef":{"name":"metadata-extractor","template":"metadata-extractor"}}]]},{"container":{"args":["{{inputs.parameters.y_south}}","{{inputs.parameters.x_west}}","{{inputs.parameters.y_north}}","{{inputs.parameters.x_east}}","/srv/domain/nwm.v1.2.4/input","/srv/output"],"command":["python","-u","entry.py"],"image":"us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:0.0.1","name":"","resources":{},"volumeMounts":[{"mountPath":"/srv/domain","name":"subsetter-data-volume"}]},"inputs":{"parameters":[{"name":"y_south"},{"name":"x_west"},{"name":"y_north"},{"name":"x_east"},{"name":"output-path"},{"name":"output-bucket"}]},"metadata":{},"name":"nwm1-subset-template","outputs":{"artifacts":[{"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"subset-results","path":"/srv/output"}]}}],"volumes":[{"name":"subsetter-data-volume","persistentVolumeClaim":{"claimName":"subset-accelerator"}}]}}
-  creationTimestamp: "2024-01-25T23:16:38Z"
-  generation: 3
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: nwm1-subset-minio
   namespace: workflows
-  resourceVersion: "636518012"
-  uid: da2b626f-b8a0-496e-8a41-c56a88bf1fb9
 spec:
   arguments:
     parameters:
@@ -48,6 +41,8 @@ spec:
     steps:
     - - arguments:
           parameters:
+          - name: separator
+            value: --
           - name: output-path
             value: '{{workflow.parameters.output-path}}'
           - name: y_south
@@ -86,7 +81,7 @@ spec:
       - python
       - -u
       - entry.py
-      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:1.0
+      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm:1.0
       name: ""
       resources: {}
       volumeMounts:
@@ -94,6 +89,7 @@ spec:
         name: subsetter-data-volume
     inputs:
       parameters:
+      - name: separator
       - name: y_south
       - name: x_west
       - name: y_north
@@ -112,8 +108,6 @@ spec:
             name: my-gcs-creds
         name: subset-results
         path: /srv/output
-        archive:
-          none: {}
   volumes:
   - name: subsetter-data-volume
     persistentVolumeClaim:

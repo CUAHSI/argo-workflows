@@ -2,17 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{},"creationTimestamp":"2023-11-30T22:05:00Z","generation":4,"labels":{"argocd.argoproj.io/instance":"workflows-sync","workflows.argoproj.io/creator":"116317613255759624565"},"name":"metadata-extractor-with-dist","namespace":"workflows","resourceVersion":"629806725","uid":"fe409969-bda8-406b-862c-9032e2c881d3"},"spec":{"arguments":{"parameters":[{"name":"bucket"},{"name":"input-path"},{"name":"output-path"}]},"entrypoint":"metadata-extractor","templateDefaults":{"inputs":{},"metadata":{},"outputs":{},"retryStrategy":{"limit":"0"},"timeout":"600s"},"templates":[{"container":{"args":["python3 hsextract/main.py extract /tmp/input-data \u0026\u0026 cp -r hsextract/vue_landing_page /tmp/input-data/.hs/ \u0026\u0026 cp -f /tmp/input-data/.hs/dataset.js /tmp/input-data/.hs/vue_landing_page/dataset.js"],"command":["/bin/sh","-c"],"image":"scootna/hsextract:0.4","name":"","resources":{}},"inputs":{"artifacts":[{"name":"input-data","path":"/tmp/input-data","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}],"parameters":[{"name":"bucket","value":"{{workflow.parameters.bucket}}"},{"name":"path","value":"{{workflow.parameters.input-path}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"}]},"metadata":{},"name":"metadata-extractor","outputs":{"artifacts":[{"name":"output-metadata","path":"/tmp/input-data/.hs","s3":{"accessKeySecret":{"key":"accessKey","name":"minio-credentials"},"bucket":"{{inputs.parameters.bucket}}","endpoint":"api.minio.cuahsi.io","key":"{{inputs.parameters.output-path}}","secretKeySecret":{"key":"secretKey","name":"minio-credentials"}}}]}}]}}
-  creationTimestamp: "2023-11-30T22:05:00Z"
-  generation: 4
   labels:
     argocd.argoproj.io/instance: workflows-sync
-    workflows.argoproj.io/creator: "116317613255759624565"
   name: metadata-extractor-with-dist
   namespace: workflows
-  resourceVersion: "636517986"
-  uid: fe409969-bda8-406b-862c-9032e2c881d3
 spec:
   arguments:
     parameters:
