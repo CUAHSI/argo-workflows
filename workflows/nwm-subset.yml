@@ -1,123 +1,175 @@
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
 metadata:
-  annotations:
-    cuahsi/description: This workflow subsets the National Water Model v1 domain data
-      for a specified region. The region of interest is specified as the coordinates
-      of  a bounding box in the CRS of the NWM domain data.
-    cuahsi/longname: Subset NWM v1.0
-    cuahsi/version: "1.0"
-  labels:
-    argocd.argoproj.io/instance: workflows-sync
   name: nwm-subset
   namespace: workflows
+  labels:
+    argocd.argoproj.io/instance: workflows-sync
+  annotations:
+    cuahsi/description: >-
+      This workflow subsets the National Water Model domain data for a specified
+      region. The region of interest is specified as the coordinates of  a
+      bounding box in the CRS of the NWM domain data.
+    cuahsi/longname: Subset NWM
+    cuahsi/version: '1.9'
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"argoproj.io/v1alpha1","kind":"WorkflowTemplate","metadata":{"annotations":{"cuahsi/description":"This
+      workflow subsets the National Water Model domain data for a specified
+      region. The region of interest is specified as the coordinates of  a
+      bounding box in the CRS of the NWM domain data.","cuahsi/longname":"Subset
+      NWM","cuahsi/version":"1.9"},"labels":{"argocd.argoproj.io/instance":"workflows-sync"},"name":"nwm-subset","namespace":"workflows"},"spec":{"arguments":{"parameters":[{"description":"NWM
+      Model
+      Version","enum":["v1.2.4","v2.0.0","v3.0.6"],"name":"model_version","value":"v1.2.4"},{"description":"South
+      boundary of the bounding
+      box.","name":"y_south","value":"382582.18746"},{"description":"West
+      boundary of the bounding
+      box.","name":"x_west","value":"1720355.72762"},{"description":"North
+      boundary of the bounding
+      box","name":"y_north","value":"367584.8784"},{"description":"East boundary
+      of the bounding
+      box.","name":"x_east","value":"1734488.4526"},{"description":"Path
+      relative to 'subsetter-outputs' to save the output
+      files.","name":"output-path","value":"asdf"},{"description":"Name of the
+      cloud bucket to save output domain
+      data.","name":"output-bucket","value":"subsetter-outputs"}]},"entrypoint":"nwm-subset-with-extraction-template","templates":[{"inputs":{},"metadata":{},"name":"nwm-subset-with-extraction-template","outputs":{},"steps":[[{"arguments":{"parameters":[{"name":"model_version","value":"{{workflow.parameters.model_version}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}"},{"name":"y_south","value":"{{workflow.parameters.y_south}}"},{"name":"x_west","value":"{{workflow.parameters.x_west}}"},{"name":"y_north","value":"{{workflow.parameters.y_north}}"},{"name":"x_east","value":"{{workflow.parameters.x_east}}"},{"name":"output-bucket","value":"{{workflow.parameters.output-bucket}}"}]},"name":"nwm-subset-step-name","template":"nwm-subset-template"}],[{"arguments":{"parameters":[{"name":"bucket","value":"{{workflow.parameters.output-bucket}}"},{"name":"input-path","value":"{{workflow.parameters.output-path}}"},{"name":"output-path","value":"{{workflow.parameters.output-path}}_metadata.tgz"}]},"name":"metadata-extraction","templateRef":{"name":"metadata-extractor","template":"metadata-extractor"}}]]},{"container":{"args":["{{inputs.parameters.y_south}}","{{inputs.parameters.x_west}}","{{inputs.parameters.y_north}}","{{inputs.parameters.x_east}}","/srv/domain/nwm.{{inputs.parameters.model_version}}/input","/srv/output"],"command":["python","-u","entry.py"],"image":"us-central1-docker.pkg.dev/apps-320517/subsetter/nwm:1.9","name":"","resources":{},"volumeMounts":[{"mountPath":"/srv/domain","name":"subsetter-data-volume"}]},"inputs":{"parameters":[{"name":"model_version"},{"name":"y_south"},{"name":"x_west"},{"name":"y_north"},{"name":"x_east"},{"name":"output-path"},{"name":"output-bucket"}]},"metadata":{},"name":"nwm-subset-template","outputs":{"artifacts":[{"archive":{"none":{}},"gcs":{"bucket":"{{inputs.parameters.output-bucket}}","key":"{{inputs.parameters.output-path}}","serviceAccountKeySecret":{"key":"serviceAccountKey","name":"my-gcs-creds"}},"name":"subset-results","path":"/srv/output"}]}}],"volumes":[{"name":"subsetter-data-volume","persistentVolumeClaim":{"claimName":"subset-accelerator"}}]}}
+  managedFields:
+    - manager: argocd-controller
+      operation: Update
+      apiVersion: argoproj.io/v1alpha1
+      time: '2024-09-19T18:53:06Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+          f:labels:
+            .: {}
+            f:argocd.argoproj.io/instance: {}
+    - manager: argo
+      operation: Update
+      apiVersion: argoproj.io/v1alpha1
+      time: '2024-09-24T14:49:15Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:cuahsi/description: {}
+            f:cuahsi/longname: {}
+            f:cuahsi/version: {}
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:spec: {}
 spec:
+  templates:
+    - name: nwm-subset-with-extraction-template
+      inputs: {}
+      outputs: {}
+      metadata: {}
+      steps:
+        - - name: nwm-subset-step-name
+            template: nwm-subset-template
+            arguments:
+              parameters:
+                - name: model-version
+                  value: '{{workflow.parameters.model-version}}'
+                - name: output-path
+                  value: '{{workflow.parameters.output-path}}'
+                - name: y-south
+                  value: '{{workflow.parameters.y-south}}'
+                - name: x-west
+                  value: '{{workflow.parameters.x-west}}'
+                - name: y-north
+                  value: '{{workflow.parameters.y-north}}'
+                - name: x-east
+                  value: '{{workflow.parameters.x-east}}'
+                - name: output-bucket
+                  value: '{{workflow.parameters.output-bucket}}'
+                - name: cell-buffer
+                  value: '{{workflow.parameters.cell-buffer}}'
+        - - name: metadata-extraction
+            arguments:
+              parameters:
+                - name: bucket
+                  value: '{{workflow.parameters.output-bucket}}'
+                - name: input-path
+                  value: '{{workflow.parameters.output-path}}'
+                - name: output-path
+                  value: '{{workflow.parameters.output-path}}_metadata.tgz'
+            templateRef:
+              name: metadata-extractor
+              template: metadata-extractor
+    - name: nwm-subset-template
+      inputs:
+        parameters:
+          - name: model-version
+          - name: y-south
+          - name: x-west
+          - name: y-north
+          - name: x-east
+          - name: output-path
+          - name: output-bucket
+          - name: cell-buffer
+      outputs:
+        artifacts:
+          - name: subset-results
+            path: /srv/output
+            gcs:
+              bucket: '{{inputs.parameters.output-bucket}}'
+              serviceAccountKeySecret:
+                name: my-gcs-creds
+                key: serviceAccountKey
+              key: '{{inputs.parameters.output-path}}'
+            archive:
+              none: {}
+      metadata: {}
+      container:
+        name: ''
+        image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm:1.9
+        command:
+          - python
+          - '-u'
+          - entry.py
+        args:
+          - '{{inputs.parameters.y-south}}'
+          - '{{inputs.parameters.x-west}}'
+          - '{{inputs.parameters.y-north}}'
+          - '{{inputs.parameters.x-east}}'
+          - /srv/domain/nwm.v{{inputs.parameters.model-version}}/input
+          - /srv/output
+          - '{{inputs.parameters.cell-buffer}}'
+          - '{{inputs.parameters.model-version}}'
+        resources: {}
+        volumeMounts:
+          - name: subsetter-data-volume
+            mountPath: /srv/domain
+  entrypoint: nwm-subset-with-extraction-template
   arguments:
     parameters:
-    - description: NWM Model Version
-      name: model_version
-      value: v1.2.4
-      enum:
-      - v1.2.4
-      - v2.0.0
-      - v3.0.6
-    - description: South boundary of the bounding box.
-      name: y_south
-      value: "382582.18746"
-    - description: West boundary of the bounding box.
-      name: x_west
-      value: "1720355.72762"
-    - description: North boundary of the bounding box
-      name: y_north
-      value: "367584.8784"
-    - description: East boundary of the bounding box.
-      name: x_east
-      value: "1734488.4526"
-    - description: Path relative to 'subsetter-outputs' to save the output files.
-      name: output-path
-      value: asdf
-    - description: Name of the cloud bucket to save output domain data.
-      name: output-bucket
-      value: subsetter-outputs
-  entrypoint: nwm1-subset-with-extraction-template
-  templates:
-  - inputs: {}
-    metadata: {}
-    name: nwm1-subset-with-extraction-template
-    outputs: {}
-    steps:
-    - - arguments:
-          parameters:
-          - name: model_version
-            value: '{{workflow.parameters.model_version}}'
-          - name: output-path
-            value: '{{workflow.parameters.output-path}}'
-          - name: y_south
-            value: '{{workflow.parameters.y_south}}'
-          - name: x_west
-            value: '{{workflow.parameters.x_west}}'
-          - name: y_north
-            value: '{{workflow.parameters.y_north}}'
-          - name: x_east
-            value: '{{workflow.parameters.x_east}}'
-          - name: output-bucket
-            value: '{{workflow.parameters.output-bucket}}'
-        name: nwm1-subset-step-name
-        template: nwm1-subset-template
-    - - arguments:
-          parameters:
-          - name: bucket
-            value: '{{workflow.parameters.output-bucket}}'
-          - name: input-path
-            value: '{{workflow.parameters.output-path}}'
-          - name: output-path
-            value: '{{workflow.parameters.output-path}}_metadata.tgz'
-        name: metadata-extraction
-        templateRef:
-          name: metadata-extractor
-          template: metadata-extractor
-  - container:
-      args:
-      - '{{inputs.parameters.y_south}}'
-      - '{{inputs.parameters.x_west}}'
-      - '{{inputs.parameters.y_north}}'
-      - '{{inputs.parameters.x_east}}'
-      - '/srv/domain/nwm.{{inputs.parameters.model_version}}/input'
-      - /srv/output
-      command:
-      - python
-      - -u
-      - entry.py
-      image: us-central1-docker.pkg.dev/apps-320517/subsetter/nwm1:1.0
-      name: ""
-      resources: {}
-      volumeMounts:
-      - mountPath: /srv/domain
-        name: subsetter-data-volume
-    inputs:
-      parameters:
-      - name: model_version
-      - name: y_south
-      - name: x_west
-      - name: y_north
-      - name: x_east
+      - name: model-version
+        value: 3.0.11
+        enum:
+          - 1.2.4
+          - 2.0.0
+          - 3.0.11
+        description: NWM Model Version
+      - name: y-south
+        value: '-526175.60460'
+        description: South boundary of the bounding box.
+      - name: x-west
+        value: '1339743.15750'
+        description: West boundary of the bounding box.
+      - name: y-north
+        value: '-497451.62760'
+        description: North boundary of the bounding box
+      - name: x-east
+        value: '1436986.49070'
+        description: East boundary of the bounding box.
       - name: output-path
+        value: tonycastronova/nwm3
+        description: Path relative to 'subsetter-outputs' to save the output files.
       - name: output-bucket
-    metadata: {}
-    name: nwm1-subset-template
-    outputs:
-      artifacts:
-      - gcs:
-          bucket: '{{inputs.parameters.output-bucket}}'
-          key: '{{inputs.parameters.output-path}}'
-          serviceAccountKeySecret:
-            key: serviceAccountKey
-            name: my-gcs-creds
-        name: subset-results
-        path: /srv/output
-        archive:
-          none: {}
+        value: subsetter-outputs
+        description: Name of the cloud bucket to save output domain data.
+      - name: cell-buffer
+        value: '4'
+        description: Number of cells to buffer when subsetting the data (optional)
   volumes:
-  - name: subsetter-data-volume
-    persistentVolumeClaim:
-      claimName: subset-accelerator
+    - name: subsetter-data-volume
+      persistentVolumeClaim:
+        claimName: subset-accelerator
