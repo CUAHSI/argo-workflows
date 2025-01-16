@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    cuahsi/description: The workflow queries HydroShare and extracts user specified
+      metadata, then writes it to disk encoded using Schema.org vocabulary.
+    cuahsi/longname: Extract HydroShare User Provided Metadata
+    cuahsi/version: "0.1"
+spec:
+  templates:
+    - name: user-metadata-extractor
+      inputs:
+        parameters:
+          - name: output-bucket
+            value: '{{workflow.parameters.bucket}}'
+          - name: resource-id
+            value: '{{workflow.parameters.resource-id}}'
+      outputs:
+        artifacts:
+          - name: output-metadata
+            path: {{inputs.parameters.resource-id}}
+            gce:
+              bucket: '{{inputs.parameters.output-bucket}}'
+              serviceAccountKeySecret:
+                name: my-gcs-creds
+                key: serviceAccountKey
+              key: '{{inputs.parameters.output-path}}'
+            archive:
+              none: {}
+      metadata: {}
+      container:
+        name: ''
+        image: cuahsi/hs-user-metadata-extractor:latest
+        command:
+          - python
+          - '-u'
+          - entry.py
+        args:
+          - '{{inputs.parameters.resource-id}}'
+          - '{{inputs.parameters.resource-id}}'
+        resources: {}
+  entrypoint: hs-metadata-extractor
+  arguments:
+    parameters:
+      - name: bucket
+        value: hs-scratch
+      - name: resource-id
+        value: 8e944afdd73d4cce945c3382bfcd25d9
+  templateDefaults:
+    inputs: {}
+    outputs: {}
+    metadata: {}
+    retryStrategy:
+      limit: '0'
+    timeout: 3600s
+
