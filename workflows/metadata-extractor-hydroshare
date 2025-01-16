@@ -1,0 +1,94 @@
+metadata:
+  name: metadata-extractor-hydroshare
+  namespace: workflows
+  uid: 3ec3dfe7-b1b9-473e-a3ff-26f79f9ebd10
+  resourceVersion: '681425410'
+  generation: 16
+  creationTimestamp: '2024-10-15T17:46:40Z'
+  labels:
+    workflows.argoproj.io/creator: 77ab83ee-ff41-4fed-b431-79188fff11aa
+    workflows.argoproj.io/creator-email: sblack.at.cuahsi.org
+    workflows.argoproj.io/creator-preferred-username: sblack
+  managedFields:
+    - manager: argo
+      operation: Update
+      apiVersion: argoproj.io/v1alpha1
+      time: '2024-10-21T02:30:46Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:workflows.argoproj.io/creator: {}
+            f:workflows.argoproj.io/creator-email: {}
+            f:workflows.argoproj.io/creator-preferred-username: {}
+        f:spec: {}
+spec:
+  templates:
+    - name: metadata-extractor
+      inputs:
+        parameters:
+          - name: bucket
+            value: '{{workflow.parameters.bucket}}'
+          - name: resource-id
+            value: '{{workflow.parameters.resource-id}}'
+        artifacts:
+          - name: input-data
+            path: /files/{{inputs.parameters.resource-id}}/
+            s3:
+              endpoint: api.minio.cuahsi.io
+              bucket: '{{inputs.parameters.bucket}}'
+              accessKeySecret:
+                name: >-
+                  {{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials
+                key: accessKey
+              secretKeySecret:
+                name: >-
+                  {{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials
+                key: secretKey
+              key: '{{inputs.parameters.resource-id}}/data/contents/'
+      outputs:
+        artifacts:
+          - name: output-metadata
+            path: /files/{{inputs.parameters.resource-id}}/.hs/
+            s3:
+              endpoint: api.minio.cuahsi.io
+              bucket: '{{inputs.parameters.bucket}}'
+              accessKeySecret:
+                name: >-
+                  {{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials
+                key: accessKey
+              secretKeySecret:
+                name: >-
+                  {{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials
+                key: secretKey
+              key: '{{inputs.parameters.resource-id}}/extracted_metadata'
+            archive:
+              none: {}
+      metadata: {}
+      container:
+        name: ''
+        image: scootna/hsextract:0.5.2
+        command:
+          - /bin/sh
+          - '-c'
+        args:
+          - >-
+            python3 hsextract/main.py extract
+            "/files/{{inputs.parameters.resource-id}}"
+            "https://dev-0.hydroshare.org/resource/{{inputs.parameters.resource-id}}/data/contents"
+        resources: {}
+  entrypoint: metadata-extractor
+  arguments:
+    parameters:
+      - name: bucket
+        value: sblack-e075845338374f0893b6087f395edf45
+      - name: resource-id
+        value: 22c2810cae284d358e5cfcafa06c2198
+  templateDefaults:
+    inputs: {}
+    outputs: {}
+    metadata: {}
+    retryStrategy:
+      limit: '0'
+    timeout: 3600s
