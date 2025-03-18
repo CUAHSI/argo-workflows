@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  labels:
+    workflows.argoproj.io/creator-email: castronova.anthony.at.gmail.com
+    workflows.argoproj.io/creator-preferred-username: tonycastronova
+  name: sprig-test
+  namespace: workflows
+spec:
+  arguments: {}
+  entrypoint: whalesay
+  templates:
+  - container:
+      args:
+      - '{{=sprig.base(inputs.parameters.strParam)}}'
+      command:
+      - cowsay
+      image: docker/whalesay
+      name: foo
+      resources: {}
+    inputs:
+      parameters:
+      - name: intParam
+        value: "20"
+      - name: strParam
+        value: foobarbaz/test/abc
+    metadata: {}
+    name: whalesay
+    outputs: {}

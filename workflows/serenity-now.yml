@@ -1,38 +1,30 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  annotations:
   generateName: simple-test
-  labels:
-    argocd.argoproj.io/instance: workflows-sync
   name: serenity-now
   namespace: workflows
 spec:
-  arguments: {}
+  arguments:
+    parameters:
+    - name: inputPath
+      value: foobarbaz/test/abc
   entrypoint: whalesay
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 1000
   templates:
   - container:
       args:
-      - ls /tmp/data | cowsay
+      - '{{inputs.parameters.inputFolder}}'
       command:
-      - sh
-      - -c
-      image: docker/whalesay:latest
-      name: ""
+      - cowsay
+      image: docker/whalesay
+      name: whalesay
       resources: {}
     inputs:
-      artifacts:
-      - gcs:
-          bucket: subsetter-static-input
-          key: nwm.v1.2.4
-          serviceAccountKeySecret:
-            key: serviceAccountKey
-            name: my-gcs-creds
-        name: input-data
-        path: /tmp/data
+      parameters:
+      - name: inputpath
+        value: '{{workflow.parameters.inputPath}}'
+      - name: inputFolder
+        value: '{{=sprig.base(workflow.parameters.inputPath)}}'
     metadata: {}
     name: whalesay
     outputs: {}

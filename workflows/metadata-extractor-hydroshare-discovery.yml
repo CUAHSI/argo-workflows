@@ -1,0 +1,76 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  labels:
+    workflows.argoproj.io/creator-email: sblack.at.cuahsi.org
+    workflows.argoproj.io/creator-preferred-username: sblack
+  name: metadata-extractor-hydroshare-discovery
+  namespace: workflows
+spec:
+  arguments:
+    parameters:
+    - name: input-bucket
+      value: sblack
+    - name: output-bucket
+      value: extracted-hydroshare-metadata
+    - name: resource-id
+      value: 8e944afdd73d4cce945c3382bfcd25d9
+  entrypoint: metadata-extractor
+  templateDefaults:
+    inputs: {}
+    metadata: {}
+    outputs: {}
+    retryStrategy:
+      limit: "0"
+    timeout: 3600s
+  templates:
+  - container:
+      args:
+      - python3 hsextract/main.py "/files" "/output" "https://hydroshare.org/resource/{{inputs.parameters.resource-id}}/data/contents"
+        "https://www.hydroshare.org/resource/{{inputs.parameters.resource-id}}/metadata"
+        "hs_user_meta.json" "{{inputs.parameters.resource-id}}"
+      command:
+      - /bin/sh
+      - -c
+      image: scootna/hsextract:0.6.2
+      name: ""
+      resources: {}
+    inputs:
+      artifacts:
+      - name: input-data
+        path: /files/
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: '{{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials'
+          bucket: '{{inputs.parameters.input-bucket}}'
+          endpoint: s3.hydroshare.org
+          key: '{{inputs.parameters.resource-id}}/data/contents/'
+          secretKeySecret:
+            key: secretKey
+            name: '{{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials'
+      parameters:
+      - name: input-bucket
+        value: '{{workflow.parameters.input-bucket}}'
+      - name: output-bucket
+        value: '{{workflow.parameters.output-bucket}}'
+      - name: resource-id
+        value: '{{workflow.parameters.resource-id}}'
+    metadata: {}
+    name: metadata-extractor
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        name: output-metadata
+        path: /output/
+        s3:
+          accessKeySecret:
+            key: accessKey
+            name: '{{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials'
+          bucket: '{{inputs.parameters.output-bucket}}'
+          endpoint: s3.hydroshare.org
+          key: '{{inputs.parameters.resource-id}}'
+          secretKeySecret:
+            key: secretKey
+            name: '{{workflow.labels.workflows.argoproj.io/creator-preferred-username}}-credentials'

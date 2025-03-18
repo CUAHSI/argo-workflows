@@ -27,7 +27,7 @@ spec:
       command:
       - /bin/sh
       - -c
-      image: scootna/hsextract:0.4.5
+      image: scootna/hsextract:0.5.2
       name: ""
       resources: {}
     inputs:
@@ -51,9 +51,7 @@ spec:
     name: metadata-extractor
     outputs:
       artifacts:
-      - archive:
-          none: {}
-        gcs:
+      - gcs:
           bucket: '{{inputs.parameters.bucket}}'
           key: '{{inputs.parameters.input-path}}/.metadata'
           serviceAccountKeySecret:

@@ -6,51 +6,56 @@ metadata:
       metadata, then writes it to disk encoded using Schema.org vocabulary.
     cuahsi/longname: Extract HydroShare User Provided Metadata
     cuahsi/version: "0.1"
+  labels:
+    example: "true"
+    workflows.argoproj.io/creator-email: castronova.anthony.at.gmail.com
+    workflows.argoproj.io/creator-preferred-username: tonycastronova
+  name: metadata-extractor-hydroshare-user
+  namespace: workflows
 spec:
-  templates:
-    - name: user-metadata-extractor
-      inputs:
-        parameters:
-          - name: output-bucket
-            value: '{{workflow.parameters.bucket}}'
-          - name: resource-id
-            value: '{{workflow.parameters.resource-id}}'
-      outputs:
-        artifacts:
-          - name: output-metadata
-            path: {{inputs.parameters.resource-id}}
-            gce:
-              bucket: '{{inputs.parameters.output-bucket}}'
-              serviceAccountKeySecret:
-                name: my-gcs-creds
-                key: serviceAccountKey
-              key: '{{inputs.parameters.output-path}}'
-            archive:
-              none: {}
-      metadata: {}
-      container:
-        name: ''
-        image: cuahsi/hs-user-metadata-extractor:latest
-        command:
-          - python
-          - '-u'
-          - entry.py
-        args:
-          - '{{inputs.parameters.resource-id}}'
-          - '{{inputs.parameters.resource-id}}'
-        resources: {}
-  entrypoint: hs-metadata-extractor
   arguments:
     parameters:
-      - name: bucket
-        value: hs-scratch
-      - name: resource-id
-        value: 8e944afdd73d4cce945c3382bfcd25d9
+    - name: output-bucket
+      value: hs-scratch
+    - name: resource-id
+      value: 8e944afdd73d4cce945c3382bfcd25d9
+  entrypoint: user-metadata-extractor
   templateDefaults:
     inputs: {}
-    outputs: {}
     metadata: {}
+    outputs: {}
     retryStrategy:
-      limit: '0'
+      limit: "0"
     timeout: 3600s
-
+  templates:
+  - container:
+      args:
+      - '{{inputs.parameters.resource-id}}'
+      - '{{inputs.parameters.resource-id}}'
+      command:
+      - python
+      - -u
+      - entry.py
+      image: cuahsi/hs-user-metadata-extractor:latest
+      name: ""
+      resources: {}
+    inputs:
+      parameters:
+      - name: output-bucket
+        value: '{{workflow.parameters.bucket}}'
+      - name: resource-id
+        value: '{{workflow.parameters.resource-id}}'
+    metadata: {}
+    name: user-metadata-extractor
+    outputs:
+      artifacts:
+      - archive:
+          none: {}
+        gcs:
+          bucket: '{{inputs.parameters.output-bucket}}'
+          key: '{{inputs.parameters.resource-id}}'
+          serviceAccountKeySecret:
+            key: serviceAccountKey
+            name: my-gcs-creds
+        name: output-metadata
+        path: '{{inputs.parameters.resource-id}}'

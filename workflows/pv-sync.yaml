@@ -1,0 +1,54 @@
+metadata:
+  name: sync-persistent-volume
+  namespace: workflows
+  labels:
+    example: 'true'
+spec:
+  workflowMetadata:
+    labels:
+      example: 'true'
+  entrypoint: argosay
+  arguments:
+    parameters:
+      - name: output-path
+        value: /
+        description: Path relative to 'output-bucket' to save the output files.
+      - name: output-bucket
+        value: subsetter-static-input
+        description: Name of the cloud bucket to sync persistent volume data to
+  templates:
+    - name: argosay
+      inputs:
+        parameters:
+          - name: output-bucket
+            value: '{{workflow.parameters.output-bucket}}'
+          - name: output-path
+            value: '{{workflow.parameters.output-path}}'
+      container:
+        name: main
+        image: argoproj/argosay:v2
+        command:
+          - /argosay
+        args:
+          - echo
+          - 'copying to {{inputs.parameters.output-bucket}}'
+    outputs:
+      artifacts:
+        - name: subset-results
+          path: /srv/domain
+          gcs:
+            bucket: '{{inputs.parameters.output-bucket}}'
+            serviceAccountKeySecret:
+              name: my-gcs-creds
+              key: serviceAccountKey
+            key: '{{inputs.parameters.output-path}}'
+          archive: {}
+  ttlStrategy:
+    secondsAfterCompletion: 300
+  podGC:
+    strategy: OnPodCompletion
+  volumes:
+    - name: subsetter-data-volume
+      persistentVolumeClaim:
+        claimName: subset-accelerator
+
